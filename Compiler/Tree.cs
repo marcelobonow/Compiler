@@ -4,42 +4,51 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-internal class Tree
+namespace Compiler
 {
-    public Element head;
-
-    public void SetHead(Element element) => head = element;
-    public void Evaluate()
+    class Tree
     {
-        var leftChild = head.GetLeftChild();
-        var rightChild = head.GetRightChild();
+        private Element headElement;
 
-        if(head.GetValue() is Operation headOperation && leftChild.GetValue() is Number leftNumber && rightChild.GetValue() is Number rightNumber)
+        public float EvaluateTree()
         {
-
-            Console.Write($"{leftChild.GetValue()} {headOperation.GetAsString()} {rightChild.GetValue()} = {headOperation.DoOperation(leftNumber, rightNumber)}");
+            return headElement.Evaluate();
+        }
+        public void SetHead(Element head)
+        {
+            headElement = head;
         }
     }
-}
-
-internal class Element
-{
-    private Element leftChild, rightChild;
-    private Symbol value;
-
-    public Element(Symbol value, Element leftChild = null, Element rightChild = null)
+    class Element
     {
-        this.leftChild = leftChild;
-        this.rightChild = rightChild;
-        this.value = value;
+        private List<Element> childs;
+        private float numberValue;
+        private Operation operationValue;
+
+        public Element(List<Element> childs, Operation operationValue, float numberValue = 0)
+        {
+            this.childs = childs;
+            this.operationValue = operationValue;
+            this.numberValue = numberValue;
+        }
+        public void AddChild(Element child)
+        {
+            if(childs == null)
+                childs = new List<Element>();
+            childs.Add(child);
+        }
+
+        public float Evaluate()
+        {
+            if(operationValue != null)
+            {
+                float value = 0;
+                foreach(var child in childs)
+                    value += child.Evaluate();
+                return value;
+            }
+            else
+                return numberValue;
+        }
     }
-    public Element(float value)
-    {
-        this.leftChild = null;
-        this.rightChild = null;
-        this.value = new Number(value);
-    }
-    public Symbol GetValue() => value;
-    public Element GetLeftChild() => leftChild;
-    public Element GetRightChild() => rightChild;
 }

@@ -4,18 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public class MainClass
+namespace Compiler
 {
-    private static void Main(string[] args)
+    public class MainClass
     {
-        var number1 = new Element(5);
-        var number2 = new Element(10);
-        var operation = new Element(new Sum(), number1, number2);
+        private static void Main(string[] args)
+        {
+            var tree = new Tree();
+            var elementsToSum = new List<Element>();
 
-        var tree = new Tree();
-        tree.SetHead(operation);
-        tree.Evaluate();
+            elementsToSum.Add(new Element(null, null, 5));
+            elementsToSum.Add(new Element(null, null, 10));
+            elementsToSum.Add(new Element(null, null, 3));
 
-        Console.ReadKey();
+            var head = new Element(elementsToSum, new Operation());
+
+            tree.SetHead(head);
+            Console.WriteLine("Testando soma");
+            Console.Write("5 + 10 + 3 = " + tree.EvaluateTree());
+            Console.ReadKey();
+        }
     }
 }
